@@ -12,8 +12,8 @@ import(
 type item struct{
 	Task	string
 	Done    bool
-	Creadted-At	time.Time
-	Completed-At	time.Time
+	CreatedAt	time.Time
+	CompletedAt	time.Time
 }
 
 type List []item
@@ -21,54 +21,54 @@ type List []item
 //Our application should add new tasks,mark them as completed,delete tasks,save the list and get the tasks.
 //First we will start with Add Function
 
-func (a *List) Add(task string) {
+func (l *List) Add(task string) {
 	t:=item{
 		Task:	task,
 		Done:	false,
-		Created-At	time.Now(),
-		Completed-At	time.Time(),
+		CreatedAt:	time.Now(),
+		CompletedAt:	time.Time{},
 	}
 
-	*a = append(*a, t)
+	*l = append(*l, t)
 }
 
 //Complete Function
 
-func(a *List) Complete(i int) error {
-	ls:=*a
+func(l *List) Complete(i int) error {
+	ls:=*l
 	if i<=0 || i>len(ls) {
 		return fmt.Errorf("item %d does not exist", i)
 	}
 	ls[i-1].Done=true
-	ls[i-1].Complete-At= time.Now()
+	ls[i-1].CompletedAt= time.Now()
 
 	return nil
 }
 
 //Save Function
-func(a *List)  Save(filename string) error {
-	json, err := json.Marshall(a)
+func(l *List)  Save(filename string) error {
+	json, err := json.Marshal(l)
 	if err != nil {
 		return err
 	}
-	return ioutill.WriteFile(filename, json, 0644)
+	return ioutil.WriteFile(filename, json, 0644)
 }
 
 //Get Function
 
-func (a *List) Get(filename string) error {
+func (l *List) Get(filename string) error {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil{
-		if errors.Is(err,os.ErrNotExists) {
+		if errors.Is(err, os.ErrNotExist) {
 			return nil
 	}
 	return err
 }
 
 	if len(file)==0 {
-		retunr nil
+		return nil
 }
-	return json.Unmarshal(file, a)
+	return json.Unmarshal(file, l)
 }
 
 	
